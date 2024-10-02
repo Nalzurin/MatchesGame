@@ -2,8 +2,8 @@ import { useState } from "react";
 import { GameStates } from "./Types/GameStates";
 import { takeMatches } from "./Scripts/GameLogic";
 import { botTurn } from "./Scripts/BotIntelligence";
-import "./App.css";
-
+import Button from "./Components/Button";
+import MatchStickVisual from "./Components/MatchStickVisual";
 function App() {
   const initialMatchesCount = 25;
   const [currentState, setCurrentState] = useState<GameStates>(
@@ -45,20 +45,53 @@ function App() {
   }
   return (
     <>
-      <h1>{currentState}</h1>
-      <h3>Matches Left: {leftMatchesCount}/25</h3>
-      <p>Player Matches: {playerMatches}</p>
-      <p>Bot Matches: {botMatches}</p>
-      {currentState === GameStates.PlayerTurn && (
-        <button onClick={() => handleTakeMatches(1)}>Take 1</button>
-      )}
-      {currentState === GameStates.PlayerTurn && (
-        <button onClick={() => handleTakeMatches(2)}>Take 2</button>
-      )}
-      {currentState === GameStates.PlayerTurn && (
-        <button onClick={() => handleTakeMatches(3)}>Take 3</button>
-      )}
-      <button onClick={handleResetGame}>Reset</button>
+      <div className="p-4 flex h-screen bg-gray-800 text-slate-100 text-center font-mono text-lg">
+        <div className="flex-1 flex align-middle items-center justify-center flex-wrap">
+          <div className="w-full"></div>
+          <p className="w-full">Player Matches: {playerMatches}</p>
+          <div className="w-full">
+            <MatchStickVisual count={playerMatches} />
+          </div>
+          <div className="flex items-center justify-evenly w-full">
+            {currentState === GameStates.PlayerTurn && (
+              <>
+                <Button
+                  handleClick={() => handleTakeMatches(1)}
+                  label="Take 1"
+                />
+                <Button
+                  handleClick={() => handleTakeMatches(2)}
+                  label="Take 2"
+                />
+                <Button
+                  handleClick={() => handleTakeMatches(3)}
+                  label="Take 3"
+                />
+              </>
+            )}
+          </div>
+        </div>
+        <div className="flex-1 flex align-middle items-center justify-center flex-wrap ">
+          <h1 className="w-full">{currentState}</h1>
+
+          <h3 className="w-full">Matches Left: {leftMatchesCount}/25</h3>
+          <div className="w-full">
+            <MatchStickVisual count={leftMatchesCount} />
+          </div>
+
+          <div className="w-full">
+            <Button handleClick={() => handleResetGame()} label="Reset" />
+          </div>
+        </div>
+        <div className="flex-1  flex align-middle items-center justify-center flex-wrap">
+          <div className="w-full"></div>
+          <p className="w-full">Bot Matches: {botMatches}</p>
+          <div className="w-full">
+            <MatchStickVisual count={botMatches} />
+          </div>
+          <div className="w-full"></div>
+        </div>
+      </div>
     </>
   );
 }
