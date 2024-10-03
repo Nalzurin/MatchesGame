@@ -5,6 +5,7 @@ import { botTurn } from "./Scripts/BotIntelligence";
 import Button from "./Components/Button";
 import MatchStickVisual from "./Components/MatchStickVisual";
 import TakeMatchesButtons from "./Components/TakeMatchesButtons";
+import Footer from "./Components/Footer";
 
 function App() {
   const [initialMatchesN, setInitialMatchesN] = useState(12);
@@ -85,72 +86,79 @@ function App() {
   }
 
   return (
-    <div className="p-8 flex h-screen bg-gray-900 text-slate-100 font-mono text-lg space-x-8">
-      {/* Player Section */}
-      <div
-        className={`flex-1 flex flex-col items-center p-6 rounded-lg ${
-          currentState === GameStates.PlayerTurn ? "bg-teal-600" : "bg-teal-800"
-        }`}
-      >
-        <h2 className="text-xl font-bold mb-4">Player</h2>
-        <p className="mb-2">Matches: {playerMatches}</p>
-        <MatchStickVisual count={playerMatches} />
-        {currentState === GameStates.PlayerTurn && (
-          <TakeMatchesButtons
-            count={maxMatchesToTake}
-            handleClick={handleTakeMatches}
-          />
-        )}
-      </div>
-
-      {/* Middle Section */}
-      <div className="flex-1 flex flex-col items-center bg-gray-800 p-6 rounded-lg space-y-4">
-        <h1 className="text-xl font-bold">Starting Turn: {defaultGoesFirst}</h1>
-        <div className="flex items-center space-x-4">
-          <Button handleClick={handleSetBotGoesFirst} label="Enemy" />
-          <Button handleClick={handleSetPlayerGoesFirst} label="Player" />
-        </div>
-        <div className="flex items-center space-x-4">
-          <label className="flex items-center">
-            <span className="mr-2">Starting matches count: 2n+1, n =</span>
-            <input
-              type="number"
-              value={initialMatchesN}
-              onChange={(e) => setInitialMatchesN(Number(e.target.value))}
-              className="w-32 px-4 py-2 rounded-lg text-gray-900"
+    <>
+      <div className="p-8 flex h-screen bg-gray-900 text-slate-100 font-mono text-lg space-x-8">
+        {/* Player Section */}
+        <div
+          className={`flex-1 flex flex-col items-center p-6 rounded-lg ${
+            currentState === GameStates.PlayerTurn
+              ? "bg-teal-600"
+              : "bg-teal-800"
+          }`}
+        >
+          <h2 className="text-xl font-bold mb-4">Player</h2>
+          <p className="mb-2">Matches: {playerMatches}</p>
+          <MatchStickVisual count={playerMatches} />
+          {currentState === GameStates.PlayerTurn && (
+            <TakeMatchesButtons
+              count={maxMatchesToTake}
+              handleClick={handleTakeMatches}
             />
-          </label>
+          )}
         </div>
-        <div className="flex items-center space-x-4">
-          <label className="flex items-center">
-            <span className="mr-2">Max matches to take:</span>
-            <input
-              type="number"
-              value={maxMatchesToTake}
-              onChange={(e) => setMaxMatchesToTake(Number(e.target.value))}
-              className="w-32 px-4 py-2 rounded-lg text-gray-900"
-            />
-          </label>
-        </div>
-        <h1>Current State: {currentState}</h1>
-        <h3>
-          Matches Left: {leftMatchesCount}/{initialMatchesCount}
-        </h3>
-        <MatchStickVisual count={leftMatchesCount} />
-        <Button handleClick={handleResetGame} label="Reset" />
-      </div>
 
-      {/* Bot Section */}
-      <div
-        className={`flex-1 flex flex-col items-center p-6 rounded-lg ${
-          currentState === GameStates.EnemyTurn ? "bg-red-700" : "bg-red-950"
-        }`}
-      >
-        <h2 className="text-xl font-bold mb-4">Bot</h2>
-        <p className="mb-2">Matches: {botMatches}</p>
-        <MatchStickVisual count={botMatches} />
+        {/* Middle Section */}
+        <div className="flex-1 flex flex-col items-center bg-gray-800 p-6 rounded-lg space-y-4">
+          <h1 className="text-xl font-bold">
+            Starting Turn: {defaultGoesFirst}
+          </h1>
+          <div className="flex items-center space-x-4">
+            <Button handleClick={handleSetBotGoesFirst} label="Enemy" />
+            <Button handleClick={handleSetPlayerGoesFirst} label="Player" />
+          </div>
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center">
+              <span className="mr-2">Starting matches count: 2n+1, n =</span>
+              <input
+                type="number"
+                value={initialMatchesN}
+                onChange={(e) => setInitialMatchesN(Number(e.target.value))}
+                className="w-32 px-4 py-2 rounded-lg text-gray-900"
+              />
+            </label>
+          </div>
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center">
+              <span className="mr-2">Max matches to take:</span>
+              <input
+                type="number"
+                value={maxMatchesToTake}
+                onChange={(e) => setMaxMatchesToTake(Number(e.target.value))}
+                className="w-32 px-4 py-2 rounded-lg text-gray-900"
+              />
+            </label>
+          </div>
+          <h1>Current State: {currentState}</h1>
+          <h3>
+            Matches Left: {leftMatchesCount}/{initialMatchesCount}
+          </h3>
+          <MatchStickVisual count={leftMatchesCount} />
+          <Button handleClick={handleResetGame} label="Reset" />
+        </div>
+
+        {/* Bot Section */}
+        <div
+          className={`flex-1 flex flex-col items-center p-6 rounded-lg ${
+            currentState === GameStates.EnemyTurn ? "bg-red-700" : "bg-red-950"
+          }`}
+        >
+          <h2 className="text-xl font-bold mb-4">Bot</h2>
+          <p className="mb-2">Matches: {botMatches}</p>
+          <MatchStickVisual count={botMatches} />
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
 
