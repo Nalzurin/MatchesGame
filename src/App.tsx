@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GameStates } from "./Types/GameStates";
 import { takeMatches } from "./Scripts/GameLogic";
 import { botTurn } from "./Scripts/BotIntelligence";
@@ -6,13 +6,18 @@ import Button from "./Components/Button";
 import MatchStickVisual from "./Components/MatchStickVisual";
 function App() {
   const initialMatchesCount = 25;
+  const [defaultGoesFirst, setDefaultGoesFirst] = useState<GameStates>(
+    GameStates.PlayerTurn
+  );
   const [currentState, setCurrentState] = useState<GameStates>(
     GameStates.PlayerTurn
   );
   const [leftMatchesCount, setLeftMatchesCount] = useState<number>(25);
   const [playerMatches, setPlayerMatches] = useState<number>(0);
   const [botMatches, setBotMatches] = useState<number>(0);
-
+  useEffect(() => {
+    handleResetGame();
+  }, [defaultGoesFirst]);
   function handleTakeMatches(matches: number) {
     const result = takeMatches(
       matches,
@@ -26,22 +31,40 @@ function App() {
     setPlayerMatches(result.playerMatches);
     setBotMatches(result.botMatches);
     if (result.currentState === GameStates.EnemyTurn) {
-      handleBotTurn(result.currentMatchesCount, result.botMatches);
+      handleBotTurn(
+        result.currentMatchesCount,
+        result.botMatches,
+        playerMatches
+      );
     }
   }
 
-  function handleBotTurn(currentMatchesCount: number, botMatches: number) {
-    const result = botTurn(currentMatchesCount, botMatches);
+  function handleSetBotGoesFirst() {
+    setDefaultGoesFirst(GameStates.EnemyTurn);
+  }
+  function handleSetPlayerGoesFirst() {
+    setDefaultGoesFirst(GameStates.PlayerTurn);
+  }
+  function handleBotTurn(
+    currentMatchesCount: number,
+    botMatches: number,
+    playerMatches: number
+  ) {
+    const result = botTurn(currentMatchesCount, botMatches, playerMatches);
     setLeftMatchesCount(result.currentMatchesCount);
     setCurrentState(result.currentState);
     setBotMatches(result.botMatches);
   }
   function handleResetGame() {
-    // Reset all states to their initial values
-    setCurrentState(GameStates.PlayerTurn);
+    setCurrentState(defaultGoesFirst);
     setLeftMatchesCount(initialMatchesCount);
     setPlayerMatches(0);
     setBotMatches(0);
+    if (defaultGoesFirst === GameStates.EnemyTurn) {
+      setTimeout(() => {
+        handleBotTurn(initialMatchesCount, 0, 0);
+      }, 0);
+    }
   }
   return (
     <>
@@ -72,6 +95,17 @@ function App() {
           </div>
         </div>
         <div className="flex-1 flex align-middle items-center justify-center flex-wrap ">
+          <div className="w-full">
+            <h1>Starting turn: {defaultGoesFirst}</h1>
+          </div>
+          <div className="w-full flex items-center justify-evenly">
+            <Button handleClick={() => handleSetBotGoesFirst()} label="Enemy" />
+            <Button
+              handleClick={() => handleSetPlayerGoesFirst()}
+              label="Player"
+            />
+          </div>
+
           <h1 className="w-full">{currentState}</h1>
 
           <h3 className="w-full">Matches Left: {leftMatchesCount}/25</h3>

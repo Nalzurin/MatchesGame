@@ -19,7 +19,7 @@ export function takeMatches(
   console.log(`Removing matches from the pile ${matchesToTake}`);
   const newMatchesCount = currentMatchesCount - matchesToTake;
 
-  if (currentState == GameStates.PlayerTurn) {
+  if (currentState === GameStates.PlayerTurn) {
     playerMatches += matchesToTake;
   } else {
     botMatches += matchesToTake;
