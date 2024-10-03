@@ -6,7 +6,7 @@ export default function TakeMatchesButtons({
   handleClick,
 }: TakeMatchesButtonsProps) {
   return (
-    <div className="flex flex-wrap gap-4 mt-4">
+    <div className="flex flex-wrap gap-4 mt-4 overflow-y-scroll">
       {Array.from({ length: count }, (_, i) => (
         <Button
           key={`take-${i}`}
