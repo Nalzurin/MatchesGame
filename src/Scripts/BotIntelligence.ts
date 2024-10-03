@@ -4,11 +4,18 @@ import { takeMatches } from "./GameLogic";
 export function botTurn(
   currentMatchesCount: number,
   botMatches: number,
-  playerMatches: number
+  playerMatches: number,
+  maxMatchesToTake: number
 ) {
-  // Bot takes between 1 and 3 matches, depending on how many are left
-  const matchesToTake: number = optimalMove(currentMatchesCount, botMatches);
-
+  const matchesToTake: number = optimalMove(
+    currentMatchesCount,
+    botMatches,
+    maxMatchesToTake
+  );
+  console.log("Bot turn");
+  console.log(currentMatchesCount);
+  console.log(botMatches);
+  console.log(matchesToTake);
   return takeMatches(
     matchesToTake,
     currentMatchesCount,
@@ -17,8 +24,12 @@ export function botTurn(
     botMatches
   );
 }
-function optimalMove(currentMatchesCount: number, botMatches: number): number {
-  if (currentMatchesCount <= 3) {
+function optimalMove(
+  currentMatchesCount: number,
+  botMatches: number,
+  maxMatchesToTake: number
+): number {
+  if (currentMatchesCount <= maxMatchesToTake) {
     for (let i = 1; i < currentMatchesCount + 1; i++) {
       if ((botMatches + i) % 2 == 0) {
         return i;
@@ -26,7 +37,7 @@ function optimalMove(currentMatchesCount: number, botMatches: number): number {
     }
     return currentMatchesCount;
   } else {
-    for (let i = 1; i < 4; i++) {
+    for (let i = maxMatchesToTake; i > 0; i--) {
       if ((botMatches + i) % 2 == 0) {
         return i;
       }

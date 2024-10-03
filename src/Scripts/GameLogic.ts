@@ -1,7 +1,4 @@
 import { GameStates } from "../Types/GameStates";
-
-//const BASE_MATCHES_COUNT: number = 25;
-
 export function takeMatches(
   matchesToTake: number,
   currentMatchesCount: number,
@@ -40,6 +37,7 @@ function endTurn(
   playerMatches: number
 ): GameStates {
   console.log("Ending turn...");
+  console.log(`Matches left ${currentMatchesCount}`);
   if (currentMatchesCount == 0) {
     return endGame(playerMatches);
   }
