@@ -1,6 +1,7 @@
 # Matches Game
 
-## A project for internship position
+A project for internship position
+
 ## React + TypeScript + Vite
 
 
