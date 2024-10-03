@@ -22,6 +22,10 @@ function App() {
   const [playerMatches, setPlayerMatches] = useState<number>(0);
   const [botMatches, setBotMatches] = useState<number>(0);
   useEffect(() => {
+    handleBotTurn();
+  }, [currentState]);
+
+  useEffect(() => {
     handleResetGame();
   }, [
     defaultGoesFirst,
@@ -42,11 +46,6 @@ function App() {
     setLeftMatchesCount(result.currentMatchesCount);
     setCurrentState(result.currentState);
     setPlayerMatches(result.playerMatches);
-    if (result.currentState === GameStates.EnemyTurn) {
-      setTimeout(() => {
-        handleBotTurn();
-      }, 1000);
-    }
   }
 
   function handleSetBotGoesFirst() {
@@ -57,17 +56,22 @@ function App() {
   }
 
   function handleBotTurn() {
-    setLeftMatchesCount((prevLeftMatchesCount) => {
-      const result = botTurn(
-        prevLeftMatchesCount,
-        botMatches,
-        playerMatches,
-        maxMatchesToTake
-      );
-      setCurrentState(result.currentState);
-      setBotMatches(result.botMatches);
-      return result.currentMatchesCount;
-    });
+    if (currentState !== GameStates.EnemyTurn) {
+      return;
+    }
+    setTimeout(() => {
+      setLeftMatchesCount((prevLeftMatchesCount) => {
+        const result = botTurn(
+          prevLeftMatchesCount,
+          botMatches,
+          playerMatches,
+          maxMatchesToTake
+        );
+        setCurrentState(result.currentState);
+        setBotMatches(result.botMatches);
+        return result.currentMatchesCount;
+      });
+    }, 1000);
   }
   function handleResetGame() {
     setCurrentState(defaultGoesFirst);
@@ -75,11 +79,6 @@ function App() {
     setLeftMatchesCount(initialMatchesCount);
     setPlayerMatches(0);
     setBotMatches(0);
-    if (defaultGoesFirst === GameStates.EnemyTurn) {
-      setTimeout(() => {
-        handleBotTurn();
-      }, 1000);
-    }
   }
 
   const playerTurnColor =
