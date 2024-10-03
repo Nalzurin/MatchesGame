@@ -1,7 +1,11 @@
 import { GameStates } from "../Types/GameStates";
 import { takeMatches } from "./GameLogic";
 
-export function botTurn(currentMatchesCount: number, botMatches: number) {
+export function botTurn(
+  currentMatchesCount: number,
+  botMatches: number,
+  playerMatches: number
+) {
   // Bot takes between 1 and 3 matches, depending on how many are left
   const matchesToTake: number = optimalMove(currentMatchesCount, botMatches);
 
@@ -9,7 +13,7 @@ export function botTurn(currentMatchesCount: number, botMatches: number) {
     matchesToTake,
     currentMatchesCount,
     GameStates.EnemyTurn,
-    0,
+    playerMatches,
     botMatches
   );
 }
