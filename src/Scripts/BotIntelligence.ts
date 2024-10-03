@@ -29,19 +29,24 @@ function optimalMove(
   botMatches: number,
   maxMatchesToTake: number
 ): number {
-  if (currentMatchesCount <= maxMatchesToTake) {
-    for (let i = 1; i < currentMatchesCount + 1; i++) {
-      if ((botMatches + i) % 2 == 0) {
-        return i;
-      }
-    }
+  if (
+    currentMatchesCount <= maxMatchesToTake &&
+    (botMatches + currentMatchesCount) % 2 === 0
+  ) {
     return currentMatchesCount;
-  } else {
-    for (let i = maxMatchesToTake; i > 0; i--) {
-      if ((botMatches + i) % 2 == 0) {
-        return i;
-      }
-    }
-    return 1;
   }
+  for (let i = maxMatchesToTake; i > 0; i--) {
+    if (currentMatchesCount - i > -1 && (currentMatchesCount - i) % 2 === 1) {
+      console.log("Optimal count to leave odd number in the pile found" + i);
+      return i;
+    }
+  }
+
+  for (let i = maxMatchesToTake; i > 0; i--) {
+    if (currentMatchesCount - i > -1 && (botMatches + i) % 2 === 0) {
+      console.log("Optimal count to have even number found " + i);
+      return i;
+    }
+  }
+  return 1;
 }
