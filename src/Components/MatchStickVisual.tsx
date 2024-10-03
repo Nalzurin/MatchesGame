@@ -1,11 +1,13 @@
 import { MatchStickVisualProps } from "../Types/MatchStickVisualProps";
 
-const emoji: string = "📌";
+const emoji = "📌";
 
 export default function MatchStickVisual({ count }: MatchStickVisualProps) {
-  let content: string = "";
-  for (let i: number = 0; i < count; i++) {
-    content += emoji;
-  }
-  return <p>{content}</p>;
+  return (
+    <p className="text-3xl my-4 break-all overflow-y-scroll">
+      {Array.from({ length: count })
+        .map(() => emoji)
+        .join("")}
+    </p>
+  );
 }
